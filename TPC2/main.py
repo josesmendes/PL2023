@@ -6,19 +6,18 @@ def main():
     for char in valores:
         word.pop(0)
         word.append(char)
-        if char.isdigit():
-            if is_on:
-                soma += int(char)
-        else:
+        if not char.isdigit():
             if char == '=':
                 print(soma)
             else:
-                listToStr = ' '.join(map(str, word))
+                listToStr = ''.join(map(str, word))
                 test = listToStr.upper()
-                if test[0] == 'O' and test[2] == 'F' and test[4] == 'F':
+                if test == 'OFF':
                     is_on = False
-                elif test[2] == 'O' and test[4] == 'N':
+                elif test[1:] == 'ON':
                     is_on = True
+        elif is_on:
+            soma += int(char)
 
 
 if __name__ == "__main__":
