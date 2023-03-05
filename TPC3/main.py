@@ -6,13 +6,15 @@ from os.path import exists
 def to_json(lines):
     top_20 = lines[:20]
     new_file = []
-    c = re.compile(r'(?P<id>\d+)::(?P<data>\d+-\d+-\d+)::(?P<nomeP1>[\w\s]*)?::(?P<nomeP2>[\w\s]*)?::(?P<nomeP3>[\w\s]*)?::(?P<extra>[^:]*)')
+    c = re.compile(
+        r'(?P<id>\d+)::(?P<data>\d+-\d+-\d+)::(?P<nomeP1>[\w\s]*)?::(?P<nomeP2>[\w\s]*)?::(?P<nomeP3>[\w\s]*)?::(?P<extra>[^:]*)')
     for line in top_20:
-        print(line)
         s = c.match(line).groupdict()
-        print(s)
-        new_file.append(json.dumps(s))
-    print(new_file)
+        new_file.append(s)
+    return json.dumps(new_file)
+
+
+
 def relacao(matches):
     # tio avo* , sobreinho , irmaos/irmao, avo, primo(s)
     counter = {'Tio': 0, 'Avo': 0, 'Irmao': 0, 'Primo': 0, 'Sobrinho': 0}
@@ -28,10 +30,11 @@ def relacao(matches):
 def proc_por_ano(matches, c):
     processos = {}
     for line in matches:
-        if not processos.get(c.match(line).group('ano')):
-            processos[c.match(line).group('ano')] = 1
+        ano = c.match(line).group('ano')
+        if not processos.get(ano):
+            processos[ano] = 1
         else:
-            processos[c.match(line).group('ano')] += 1
+            processos[ano] += 1
     return processos
 
 
@@ -85,7 +88,8 @@ def main():
             print('----------------RELACAO--------------------')
             relacao(matches)
             print('----------------JSON--------------------')
-            to_json(lines)
+            js_file = to_json(lines)
+            print(js_file)
 
 if __name__ == "__main__":
     main()
